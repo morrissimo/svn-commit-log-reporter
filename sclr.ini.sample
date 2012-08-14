@@ -1,0 +1,58 @@
+#################
+# This file specifies the paths and files to generate commit log reports for, as well as 
+# how to log them. 
+#
+# The settings section specifies two required keys: the start and end dates to retrieve logs for; these 
+# dates should be in YYYY-MM-DD format. There is also support for an optional "svnusername" key which is 
+# used to connect to SVN as a different user.
+#
+# The rest of the sections indicate paths to retrieve log files for: e.g., [/SomePath/SomeProject/trunk]
+# Within each section, you list the files to retrieve commit logs for, or use * to indicate 
+# all files on that path. Note that using * requires a logalias for that section as well.
+#
+# By default, commit log output will be logged to a file named <svn filename>.log, one file per SVN file.
+# However, you may also use (only *one* of) two special keys to further tailor how the output files should be named:
+#  # "logalias" indicates that all of the commit log output for this section should be logged to a file named <filename>
+#  logalias=<filename>  
+#  # "logsuffix" indicates that of the files specified for this section, all of their commit log output will be logged to files name <filename><.somefilesuffix>
+#  logsuffix=<.somefilesuffix>  
+# 
+
+#################
+# Example
+# (comments lines start with # or ; - comments can also be added at the end of a line with ;)
+
+[settings]
+repobaseurl=http://svn.myserver.com  		; required: should be full url, e.g. http://your.svnserverhost.com
+startdate=2010-01-01						; required: YYYY-MM-DD
+enddate=2012-08-01							; required: YYYY-MM-DD - HEAD is also valid
+#svnusername=yourusername					; optional
+
+# this section would produce commit logs as follows:
+#  /Financial/Reporting/ReportProjects/ReportingServices/Inventory/trunk/PO Summary.rdl -> PO Summary.rdl.log
+#  /Financial/Reporting/ReportProjects/ReportingServices/Inventory/trunk/Inventory Recon.rdl -> Inventory Recon.rdl.log
+#  /Financial/Reporting/ReportProjects/ReportingServices/Inventory/trunk/Inventory Depr Recon.rdl -> Inventory Depr Recon.rdl.log
+#
+[/Financial/Reporting/ReportProjects/ReportingServices/Inventory/trunk]
+PO Summary.rdl
+Inventory Recon.rdl
+Inventory Depr Recon.rdl
+
+# this section would log all the commit log data from this path to a single file:
+#  /Financial/Reporting/ReportProjects/ReportingServices/Inventory/trunk/* -> BOSS.DisposalViewer.log
+#
+# ! Note that using the special option "*" requires specifying a logalias
+#
+[/Financial/DisposalViewer]
+logalias=BOSS.DisposalViewer.log
+*
+
+# this section would produce commit logs as follows:
+#  /Financial/Reporting/ReportProjects/ReportingServices/Merchandising/trunk/Potential Obsolescence By Sku.rdl -> Potential Obsolescence By Sku.rdl.PotentialObsolescence.log
+#  /Financial/Reporting/ReportProjects/ReportingServices/Merchandising/trunk/Potential Obsolescence stores.rdl -> Potential Obsolescence stores.rdl.PotentialObsolescence.log
+#
+[/Financial/Reporting/ReportProjects/ReportingServices/Merchandising/trunk]
+logsuffix=.PotentialObsolescence.log
+Potential Obsolescence By Sku.rdl
+Potential Obsolescence stores.rdl
+
